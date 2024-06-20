@@ -1,9 +1,15 @@
 from datetime import date, timedelta
 import numpy as np
 import pandas as pd
+from datetime import date, timedelta
+from pytrends.request import TrendReq
+import yfinance as yf
 
 
-def montecarlo(data):
+
+def montecarlo():
+
+    data = yf.download('MSFT', period="max")
     prices = data['Adj Close']
 
     log_returns = np.log(prices / prices.shift(1)).dropna()
@@ -34,13 +40,9 @@ def montecarlo(data):
         "Date": dates,
         "Averaged Stock Price": avgprices
     }
+    
     simulation_df = pd.DataFrame(simdata)
 
-    
-    # print(simulation_df)
-    # for col in simulation_df.columns:
-    #     print(col)
-    # print(simulation_df)
     return simulation_df
 # montecarlo()
 

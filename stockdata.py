@@ -12,3 +12,11 @@ def getStockData(company):
 def getcompanytrends(company):
     trends = TrendReq()
 
+def getCurrentPrice(company):
+    stock = yf.Ticker(company)
+    currentprice = stock.info['currentPrice']
+    formatted_number = f"${currentprice:.2f}"
+    return formatted_number
+
+
+
