@@ -5,15 +5,14 @@ Modules utilized: Flask, Jinja, Plotly Express, NumPy, Pandas, Pytrends, Datetim
 
 Next additions: 
 - modernize interface
-- allow for company specific queries
-- factor in web traffic to "random" variable
-- display monte carlo formula and context
+- create error page for nonexistent company queries 
+- create loading page
+- factor in web traffic to "random" variable 
 
 - allow for date specific queries
 - return highest stock price + corresponding date
 - return lowest stock price + corresponding date
 - calculate accuracy for predictions (2020-Present)
-
 
 - allow for downloadable information (.csv, .xls, SQL)
 - incorporate machine learning model?

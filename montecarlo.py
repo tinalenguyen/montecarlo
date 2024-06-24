@@ -40,7 +40,7 @@ def montecarlo():
         "Date": dates,
         "Averaged Stock Price": avgprices
     }
-    
+
     simulation_df = pd.DataFrame(simdata)
 
     return simulation_df
