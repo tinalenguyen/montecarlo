@@ -27,6 +27,8 @@ def getURL(company):
     website=website[12:]
     return website
 
+
+
 # print(getURL("AAPL"))
 
 # webscraping mumbo jumbo

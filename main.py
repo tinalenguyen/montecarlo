@@ -38,7 +38,7 @@ def home():
 def montecarlopage():
     company = request.args.get('company', None)
     data = getStockData(company)
-    df = montecarlo()
+    df = montecarlo(company)
     
     output_html_path=r"templates/montecarlo.html"
     input_template_path = r"templates/montecarlotemplate.html"
@@ -48,11 +48,22 @@ def montecarlopage():
     logoURL = f"https://img.logo.dev/{getURL(company)}?token=pk_Tmo8XSMOQLyniJMQogM1ew"
     plotly_jinja_data=fig.to_html(full_html=False)
     currentprice=getCurrentPrice(company)
+    rawminimum = df.min(axis=0)[1]
+    minimum = f"{rawminimum:.2f}"
+
+    rawmaximum = df.max(axis=0)[1]
+    maximum = f"{rawmaximum:.2f}"
+
+    corresmindate=df.loc[df['Averaged Stock Price']==rawminimum, 'Date'].values[0]
+    corresmaxdate=df.loc[df['Averaged Stock Price']==rawmaximum, 'Date'].values[0]
+
+
+    # minimum=str(corresmindate[0])
 
     with open(output_html_path, "w", encoding="utf-8") as output_file:
         with open(input_template_path) as template_file:
             j2_template = Template(template_file.read())
-            output_file.write(j2_template.render(brand=company, currentstockprice=currentprice, logo=logoURL, fig=plotly_jinja_data))
+            output_file.write(j2_template.render(brand=company, currentstockprice=currentprice, logo=logoURL, fig=plotly_jinja_data, minprice=minimum, mindate=corresmindate, maxprice=maximum, maxdate=corresmaxdate))
             # output_file.write(j2_template.render(plotly_jinja_data))
             
     return render_template('montecarlo.html')

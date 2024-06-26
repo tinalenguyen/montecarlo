@@ -7,9 +7,9 @@ import yfinance as yf
 
 
 
-def montecarlo():
+def montecarlo(company):
 
-    data = yf.download('MSFT', period="max")
+    data = yf.download(company, period="max")
     prices = data['Adj Close']
 
     log_returns = np.log(prices / prices.shift(1)).dropna()

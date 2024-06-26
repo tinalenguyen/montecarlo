@@ -10,8 +10,6 @@ Next additions:
 - factor in web traffic to "random" variable 
 
 - allow for date specific queries
-- return highest stock price + corresponding date
-- return lowest stock price + corresponding date
 - calculate accuracy for predictions (2020-Present)
 
 - allow for downloadable information (.csv, .xls, SQL)

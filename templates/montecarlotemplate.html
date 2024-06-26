@@ -45,13 +45,14 @@
 <div class="container" style="font-family: 'Inter', Times, serif;">
     <h>
         <div class="row">
-            <div class="col-6 align-self-start">
-                <div class="container" style="font-weight: bolder; font-size: 4vw">
+            <!-- <div class="col-6 align-self-start"> -->
+    
+                <div class="container text-center" style="font-weight: bolder; font-size: 4vw">
                     <b>Current Price: {{ currentstockprice }} </b>
                 </div>
                 <br>
-                <div class="container left-align">
-                    {{ brand }} Stock Data
+                <div class="container text-center">
+                   <i> {{ brand }} Stock Data </i>
                 </div>
                 <br>
             </div>
@@ -64,9 +65,33 @@
             
             <br>
             <!-- <img src="static/MCGBMformula.png" alt="Formula"> -->
-        </div>
     </h>
 </div>
+
+
+<div class="row">
+    <div class="col-sm-6 px-5">
+      <div class="card text-center" style="box-shadow: 0px 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);">
+        <div class="card-body">
+          <h3 class="card-title">Lowest Price</h3>
+          <h5 class="card-text">${{ minprice }}</h5>
+          <p class="card-text" style="color:darkgray">{{ mindate }}</p>
+          <!-- <a href="#" class="btn btn-primary">Go somewhere</a> -->
+        </div>
+      </div>
+    </div>
+    <div class="col-sm-6 px-5">
+      <div class="card text-center">
+        <div class="card-body">
+          <h3 class="card-title">Highest Price</h3>
+          <h5 class="card-text">${{ maxprice }}</h5>
+          <p class="card-text" style="color:darkgray;">{{ maxdate }}</p>
+          <!-- <a href="#" class="btn btn-primary">Go somewhere</a> -->
+        </div>
+      </div>
+    </div>
+  </div>
+
 
 
 
