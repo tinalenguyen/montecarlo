@@ -1,5 +1,5 @@
 from flask import Flask, redirect, url_for, request, render_template
-from montecarlo import montecarlo, cumulativemontecarlo
+from montecarlo import montecarlo, cumulativemontecarlo, getCumMean, getStanDev
 from stockdata import getCurrentPrice, getURL
 import pandas as pd
 import plotly.express as px
@@ -58,10 +58,8 @@ def montecarlopage():
     corresmindate=df.loc[df['Averaged Stock Price']==rawminimum, 'Date'].values[0]
     corresmaxdate=df.loc[df['Averaged Stock Price']==rawmaximum, 'Date'].values[0]
  
-    # todaypredicted = df.at[0, 'Averaged Stock Price']
-    # todayerror = abs(currentprice-todaypredicted) / currentprice
-
-    # todayaccuracy = (1-todayerror)*100
+    mean = getCumMean()
+    standev = getStanDev()
 
 
     with open(output_html_path, "w", encoding="utf-8") as output_file:
@@ -69,6 +67,7 @@ def montecarlopage():
             j2_template = Template(template_file.read())
             output_file.write(j2_template.render(brand=company, currentstockprice=formatcurrentprice, fig=plotly_jinja_data, 
                                                  minprice=minimum, mindate=corresmindate, maxprice=maximum, maxdate=corresmaxdate,
+                                                 mean=mean, standev=standev
                                                 ))
             # output_file.write(j2_template.render(plotly_jinja_data))
             

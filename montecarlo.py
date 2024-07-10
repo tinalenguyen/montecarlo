@@ -59,7 +59,16 @@ def cumulativemontecarlo():
     #                 newavg = (avgprices[y] + price)/2
     #                 avgprices[y]=newavg
     
-            
+    global mean
+    mean = (sum(avgprices))/len(avgprices)
+
+    global standev 
+    total=0
+    for i in range(len(avgprices)):
+        diff = avgprices[i]-mean
+        total+= (diff*diff)
+    standev=total/len(avgprices)
+
     simdata= {
         "Date": dates,
         "Averaged Stock Price": avgprices
@@ -70,6 +79,11 @@ def cumulativemontecarlo():
 
     return simulation_df
 
+def getCumMean():
+    return mean
+
+def getStanDev():
+    return standev
 # input format 2099-01-01, example if 2023 was submitted, year=2024-01-01
 def montecarlotest(year):
     # plot actual vs predicted of the year
