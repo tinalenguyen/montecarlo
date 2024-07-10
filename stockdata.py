@@ -1,23 +1,33 @@
 from datetime import date, timedelta
 from pytrends.request import TrendReq
+import plotly.express as px
 import yfinance as yf
 import numpy as np
 import pandas as pd
 import requests
 import matplotlib.pyplot as plt
 
-def getStockData(company):
-    data = yf.download(company, period="max")
-    return data
-
-def getcompanytrends(company):
-    trends = TrendReq()
+def getcompanytrends():
+    pytrends = TrendReq(hl='en-US', tz=360)
+    # historicaldf = trends.get_historical_interest('apple', year_start=2020, month_start=10, day_start=1, hour_start=0, year_end=2021, month_end=10, day_end=1, hour_end=0, cat=0, geo='', gprop='', sleep=0)
+    kw_list = ["Microsoft Stocks"]
+    pytrends.build_payload(kw_list, cat=0, timeframe='today 5-y', geo='', gprop='')
+    #visualise
+    #plot a timeseries chart
+    # historicaldf.plot(figsize=(20, 12))
+    historicaldf = pytrends.interest_over_time()
+    #plot seperate graphs, using theprovided keywords
+    # historicaldf.plot(subplots=True, figsize=(20, 12))
+    fig = px.line(historicaldf, y="Microsoft Stocks", title="Monte Carlo Simulation") 
+    fig.update_layout(title_x=0.5, font_color="Black", font_family="Sans Serif")
+    fig.show()
+    print(historicaldf)
+    # return trends
 
 def getCurrentPrice(company):
     stock = yf.Ticker(company)
     currentprice = stock.info['currentPrice']
-    formatted_number = f"${currentprice:.2f}"
-    return formatted_number
+    return currentprice
 
 def getURL(company):
     URL=f"https://www.{company}.com"
@@ -26,7 +36,6 @@ def getURL(company):
     website = info.get("website", "N/A")
     website=website[12:]
     return website
-
 
 
 # print(getURL("AAPL"))

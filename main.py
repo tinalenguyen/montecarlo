@@ -1,6 +1,6 @@
 from flask import Flask, redirect, url_for, request, render_template
-from montecarlo import montecarlo
-from stockdata import getStockData, getCurrentPrice, getURL
+from montecarlo import montecarlo, cumulativemontecarlo
+from stockdata import getCurrentPrice, getURL
 import pandas as pd
 import plotly.express as px
 from jinja2 import Template
@@ -37,17 +37,18 @@ def home():
 @app.route('/montecarlo', methods=['GET','POST'])
 def montecarlopage():
     company = request.args.get('company', None)
-    data = getStockData(company)
-    df = montecarlo(company)
+
+    montecarlo(company)
+    df = cumulativemontecarlo()
     
     output_html_path=r"templates/montecarlo.html"
     input_template_path = r"templates/montecarlotemplate.html"
     fig = px.line(df, x='Date', y='Averaged Stock Price', title="Monte Carlo Simulation") 
     fig.update_layout(title_x=0.5, font_color="Black", font_family="Sans Serif")
 
-    logoURL = f"https://img.logo.dev/{getURL(company)}?token=pk_Tmo8XSMOQLyniJMQogM1ew"
     plotly_jinja_data=fig.to_html(full_html=False)
     currentprice=getCurrentPrice(company)
+    formatcurrentprice = f"${currentprice:.2f}"
     rawminimum = df.min(axis=0)[1]
     minimum = f"{rawminimum:.2f}"
 
@@ -56,18 +57,26 @@ def montecarlopage():
 
     corresmindate=df.loc[df['Averaged Stock Price']==rawminimum, 'Date'].values[0]
     corresmaxdate=df.loc[df['Averaged Stock Price']==rawmaximum, 'Date'].values[0]
+ 
+    # todaypredicted = df.at[0, 'Averaged Stock Price']
+    # todayerror = abs(currentprice-todaypredicted) / currentprice
 
+    # todayaccuracy = (1-todayerror)*100
 
-    # minimum=str(corresmindate[0])
 
     with open(output_html_path, "w", encoding="utf-8") as output_file:
         with open(input_template_path) as template_file:
             j2_template = Template(template_file.read())
-            output_file.write(j2_template.render(brand=company, currentstockprice=currentprice, logo=logoURL, fig=plotly_jinja_data, minprice=minimum, mindate=corresmindate, maxprice=maximum, maxdate=corresmaxdate))
+            output_file.write(j2_template.render(brand=company, currentstockprice=formatcurrentprice, fig=plotly_jinja_data, 
+                                                 minprice=minimum, mindate=corresmindate, maxprice=maximum, maxdate=corresmaxdate,
+                                                ))
             # output_file.write(j2_template.render(plotly_jinja_data))
             
     return render_template('montecarlo.html')
 
+@app.route('/testing')
+def testing():
+    return 0
 
 # main driver function
 if __name__ == '__main__':
