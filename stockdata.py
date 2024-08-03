@@ -31,3 +31,20 @@ def getURL(company):
     website=website[12:]
     return website
 
+def getLongname():
+    return stock.info['longName']
+
+def getSummary():
+    return stock.info['longBusinessSummary']
+
+def getStaff():
+    return stock.info['companyOfficers']
+
+def getAddress():
+    addr=stock.info['address1']+", "+stock.info['city']+", "+stock.info['state']+" "+stock.info['zip']
+    return addr
+
+def info(company):
+    global stock
+    stock=yf.Ticker(company)
+    print(stock.info)
