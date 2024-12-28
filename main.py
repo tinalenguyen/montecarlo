@@ -1,8 +1,10 @@
 from flask import Flask, redirect, url_for, request, render_template
-from montecarlo import montecarlo, cumulativemontecarlo, getCumMean, getStanDev
+from montecarlo import MontecarloAlgo
 from stockdata import getCurrentPrice, getURL
+
 import pandas as pd
 import plotly.express as px
+
 from jinja2 import Template
 
 app = Flask(__name__)
@@ -19,8 +21,8 @@ def home():
 def montecarlopage():
     company = request.args.get('company', None)
 
-    montecarlo(company)
-    df = cumulativemontecarlo()
+    montecarlo =  MontecarloAlgo(company=company)
+    df = montecarlo.get_cumulative_data()
     
     output_html_path=r"templates/montecarlo.html"
     input_template_path = r"templates/montecarlotemplate.html"
@@ -39,23 +41,27 @@ def montecarlopage():
     corresmindate=df.loc[df['Averaged Stock Price']==rawminimum, 'Date'].values[0]
     corresmaxdate=df.loc[df['Averaged Stock Price']==rawmaximum, 'Date'].values[0]
  
-    mean = getCumMean()
-    standev = getStanDev()
+    mean = montecarlo.cumulative_mean()
+    standev = montecarlo.standard_deviation()
 
 
     with open(output_html_path, "w", encoding="utf-8") as output_file:
         with open(input_template_path) as template_file:
             j2_template = Template(template_file.read())
-            output_file.write(j2_template.render(brand=company, currentstockprice=formatcurrentprice, fig=plotly_jinja_data, 
-                                                 minprice=minimum, mindate=corresmindate, maxprice=maximum, maxdate=corresmaxdate,
-                                                 mean=mean, standev=standev
-                                                ))
+            output_file.write(j2_template.render(
+                brand=company, 
+                currentstockprice=formatcurrentprice,
+                fig=plotly_jinja_data, 
+                minprice=minimum, 
+                mindate=corresmindate, 
+                maxprice=maximum, 
+                maxdate=corresmaxdate,
+                mean=mean, 
+                standev=standev
+            ))
             
     return render_template('montecarlo.html')
 
-@app.route('/testing')
-def testing():
-    return 0
 
 if __name__ == '__main__':
     app.run(debug=True)
