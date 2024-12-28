@@ -20,7 +20,7 @@ class MontecarloAlgo():
         self._standard_deviation: float | None
         self._cumulative_mean: float | None
 
-        self.get_cumulative_data()
+        self._dataframe = self.get_cumulative_data()
         
     @property
     def standard_deviation(self) -> float:
@@ -30,7 +30,9 @@ class MontecarloAlgo():
     def cumulative_mean(self) -> float:
         return self._cumulative_mean
 
-
+    @property
+    def dataframe(self) -> pd.DataFrame:
+        return self._dataframe
     
 
     

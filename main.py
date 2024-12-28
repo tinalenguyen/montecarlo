@@ -22,7 +22,7 @@ def montecarlopage():
     company = request.args.get('company', None)
 
     montecarlo =  MontecarloAlgo(company=company)
-    df = montecarlo.get_cumulative_data()
+    df = montecarlo._dataframe()
     
     output_html_path=r"templates/montecarlo.html"
     input_template_path = r"templates/montecarlotemplate.html"
